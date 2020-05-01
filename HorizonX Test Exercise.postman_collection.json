@@ -1,0 +1,61 @@
+{
+	"info": {
+		"_postman_id": "e45688ea-6598-4b98-b6b9-4a64632a4dc8",
+		"name": "HorizonX Test Exercise",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET LatestNews From Currents API",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Feed News to CSV",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/latest-news/feed",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"latest-news",
+						"feed"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET NewCount Per Category",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/latest-news/count-categorywise",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"latest-news",
+						"count-categorywise"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
