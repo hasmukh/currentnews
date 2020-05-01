@@ -39,16 +39,12 @@ public class CurrentsClientImpl implements CurrentsClient {
 		try {
 			UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParam("language", language)
 					.queryParam("apiKey", apiKey);
-
 			return restTemplate.getForObject(builder.toUriString(), ResponseDTO.class);
 
 		} catch (HttpClientErrorException e) {
 			LOGGER.error("getLatestNewsByLanguage() :: Error occured while fetching Latest news", e);
 			throw e;
-		}catch(Exception e) {
-			e.printStackTrace();
 		}
-		return null;
 	}
 
 }

@@ -22,7 +22,7 @@ public class CurrentsNewsUtil {
 				.build();
 	}
 
-	public static void setRecord(NewsDTO news, List<String> record) {
+	public static void parseNewsDTOToRecord(NewsDTO news, List<String> record) {
 		record.add(news.getId());
 		record.add(news.getTitle());
 		record.add(news.getDescription());

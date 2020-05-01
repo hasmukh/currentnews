@@ -12,5 +12,5 @@ public interface NewsService {
 
 	Map<String, Long> getTotalNewsPerCategory();
 
-	void feedNewsToCSV(List<NewsDTO> latestNews) throws IOException;
+	void feedNewsToCSV(List<NewsDTO> latestNews, String latestNewsFilePath) throws IOException;
 }

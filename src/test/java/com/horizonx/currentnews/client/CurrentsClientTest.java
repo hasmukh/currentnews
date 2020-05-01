@@ -4,28 +4,24 @@ import java.net.URISyntaxException;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.horizonx.currentnews.CurrentsNewsBaseTest;
 import com.horizonx.currentnews.data.CurrentsNewsTestData;
 import com.horizonx.currentnews.dto.ResponseDTO;
 
-@SpringBootTest
-@ExtendWith(SpringExtension.class)
-public class CurrentsClientTest {
+public class CurrentsClientTest extends CurrentsNewsBaseTest {
 
 	@Mock
 	private RestTemplate restTemplate;
 
 	@InjectMocks
 	private CurrentsClientImpl currentsClient;
-	
+
 	@Test
 	public void testCurrentsClientFetchLatestNews() throws JsonProcessingException, URISyntaxException {
 

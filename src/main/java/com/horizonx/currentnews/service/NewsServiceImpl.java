@@ -58,7 +58,7 @@ public class NewsServiceImpl implements NewsService {
 		try {
 			ResponseDTO latestNewsResponse = currentsClient.getLatestNewsByLanguage(LANGUAGE_EN);
 			if (!StringUtils.isEmpty(latestNewsResponse) && !CollectionUtils.isEmpty(latestNewsResponse.getNews())) {
-				feedNewsToCSV(latestNewsResponse.getNews());
+				feedNewsToCSV(latestNewsResponse.getNews(), latestNewsFilePath);
 			}
 		} catch (Exception e) {
 			LOGGER.error("feedLatestNews() :: Exception occurred while feeding news", e);
@@ -70,7 +70,7 @@ public class NewsServiceImpl implements NewsService {
 	public Map<String, Long> getTotalNewsPerCategory() {
 		Map<String, Long> occurancesOfCategory = null;
 		try {
-			List<NewsDTO> latestNews = parserNewsCSV();
+			List<NewsDTO> latestNews = parserNewsFeedFromCSV();
 			List<String> categories = new ArrayList<>();
 			latestNews.forEach(news -> categories.addAll(news.getCategory()));
 			occurancesOfCategory = categories.stream()
@@ -83,25 +83,28 @@ public class NewsServiceImpl implements NewsService {
 	}
 
 	@Override
-	public void feedNewsToCSV(List<NewsDTO> latestNews) throws IOException {
+	public void feedNewsToCSV(List<NewsDTO> latestNews, String latestNewsFilePath) throws IOException {
 
 		CSVFormat csvFormat = CSVFormat.DEFAULT.withRecordSeparator(NEW_LINE).withSkipHeaderRecord();
 		CSVPrinter csvPrinter = null;
+		Boolean isFileAlreadyCreated = isFileExist(latestNewsFilePath);
 		try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(latestNewsFilePath), StandardOpenOption.APPEND,
 				StandardOpenOption.CREATE);) {
 
 			csvPrinter = new CSVPrinter(writer, csvFormat);
 
-			List<String> csvHeader = Arrays.stream(Header.values()).map(Header::getText).collect(Collectors.toList());
-
-			csvPrinter.printRecord(csvHeader);
+			if (!isFileAlreadyCreated) {
+				List<String> csvHeader = Arrays.stream(Header.values()).map(Header::getText)
+						.collect(Collectors.toList());
+				csvPrinter.printRecord(csvHeader);
+			}
 
 			List<String> record = null;
 			// Writing records to CSV
 			LOGGER.info(LOG_MSG_WRT_CSV_START);
 			for (NewsDTO news : latestNews) {
 				record = new ArrayList<>();
-				CurrentsNewsUtil.setRecord(news, record);
+				CurrentsNewsUtil.parseNewsDTOToRecord(news, record);
 				csvPrinter.printRecord(record);
 			}
 			LOGGER.info(LOG_MSG_WRT_CSV_FINISH);
@@ -117,7 +120,11 @@ public class NewsServiceImpl implements NewsService {
 		}
 	}
 
-	private List<NewsDTO> parserNewsCSV() {
+	private Boolean isFileExist(String path) {
+		return new File(path).exists();
+	}
+
+	private List<NewsDTO> parserNewsFeedFromCSV() {
 
 		File csvFile = new File(latestNewsFilePath);
 		List<NewsDTO> latestNews = new ArrayList<>();
